@@ -3,10 +3,25 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>LA Nature Juice</title>
+    <title>LA Nature's Juice</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
-    <script src="main.js"></script>
+   
+    <script src="cytoscape.min.js"></script>
+    <!-- <script src="main.js"></script> -->
+
+    <style>
+        #cy {
+            width: 60%;
+            height: 60%;
+            position: absolute;
+            top: 240px;
+            left: 200px;
+             
+        }
+    </style>
+
+
 </head>
 <body >
         <a href="index.html">Home</a> &nbsp;-&nbsp;
@@ -16,10 +31,82 @@
         <a href="about-us.html">About Us</a> &nbsp;-&nbsp;
         <a href="contact-us.html">Contact Us</a> &nbsp;-&nbsp;
         <a href="membership-node.html">Add Member Node</a> &nbsp; 
-        <div style="background-image: url('photos/Body-short2.jpg');  width: 100%; height: 1000px;">
+        <div style="background-image: url('photos/Body-short.jpg');  width: 100%; height: 1500px; padding-top: 9.5em;  padding-left: 20em;">
+            <div id="content-header"  >
+                <div><label style="width:110px; display: inline-block;">Source ID</label> <label style="width:110px; display:inline-block;">ID</label> <label style="width:100px; display: inline-block;">Name</label></div>
+                <input type="text" name="sid" id="sid" placeholder="Source ID" style="width:100px" /> 
+                <input type="text" name="mid" id="mid" placeholder="ID" style="width:100px" />
+                <input type="text" name="mname" id="mname" placeholder="Name" style="width:100px"/> 
+                <button onclick="addNode()">Add Node</button>
+            </div>
+            <div>
+                <div id="cy"></div>
+            </div>  
         </div>
         
+        <script>
+            var cy = cytoscape({
+                container: document.querySelector('#cy'), 
+                    
+                layout: {
+                        name: 'grid'
+                    }, 
+                    elements: {
+                        nodes: [
+                            { data: { id: 'jerry', name: 'jerry' } },
+                            { data: { id: 'elaine', name: 'elaine' } },
+                            { data: { id: 'kramer', name: 'kramer' } },
+                            { data: { id: 'george', name: 'george' } }
+                        ],                        
+                        edges: [
+                            { data: { source: 'jerry', target: 'elaine' } }, 
+                            { data: { source: 'jerry', target: 'kramer' } },   
+                            { data: { source: 'jerry', target: 'george' } },   
+                        ]
+                },
+                style: [
+                    {
+                        selector: 'node',
+                        style: { 
+                            'background-color': 'gray',
+                            label: 'data(name)'
+                        }
+                    }]      
 
+            });
+
+          
+            function addNode(){
+                var source_id = document.getElementById('sid').value;
+                var _id = document.getElementById('mid').value;
+                var _name = document.getElementById('mname').value;
+
+                // if(source_id.length==0){
+                //     source_id == "j";
+                // }
+                console.log("source:" +source_id + " id:" + _id + " name:"+_name);
+
+           
+                cy.add({
+                    data: { id: _id, name: _name }                    
+                });
+                
+                //var source = id;
+                cy.add({
+                    data: { 
+                        source: source_id,
+                        target: _id
+                    }
+                });
+               
+
+            cy.layout({
+                name: 'circle'
+            }).run();
+
+
+            }
+          </script>
     
 </body>
 </html>
